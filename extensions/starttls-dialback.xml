@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE xep SYSTEM 'xep.dtd' [
+  <!ENTITY % ents SYSTEM 'xep.ent'>
+%ents;
+]>
+<?xml-stylesheet type='text/xsl' href='xep.xsl'?>
+<xep>
+<header>
+  <title>STARTTLS+Dialback</title>
+  <abstract>This specification provides documentation how Server Dialback is used together with Transport Layer Security.</abstract>
+  &LEGALNOTICE;
+  <number>xxxx</number>
+  <status>ProtoXEP</status>
+  <type>Historical</type>
+  <sig>Standards</sig>
+  <approver>Council</approver>
+  <dependencies>
+    <spec>XMPP Core</spec>
+    <spec>XEP-0220</spec>
+  </dependencies>
+  <supersedes/>
+  <supersededby/>
+  <shortname>NOT_YET_ASSIGNED</shortname>
+  <revision>
+    <version>0.0.1</version>
+    <date>2013-11-04</date>
+    <initials>ph</initials>
+    <remark><p>First draft.</p></remark>
+  </revision>
+</header>
+<section1 topic='Introduction' anchor='intro'>
+  <p>TODO</p>
+</section1>
+<section1 topic='Protocol' anchor='protocol'>
+  <code><![CDATA[
+orchard.capulet.     home.montague.
+example              example 
+(as Initiating)      (as Receiving
+   Server)              Server)
+----------------     -------------
+    |                    |
+    |  [if necessary,    |
+    |   perform DNS      |
+    |   lookup on        |
+    |   Target Domain,   |
+    |   open TCP         |
+    |   connection,      |
+    |   and establish    |
+    |   stream]          |
+    | -----------------> |
+    |  (ID D60000229F)   |
+    |                    |
+    |      send          |               capulet.example
+    |  dialback key      |             (as Authoritative 
+    | -----(STEP 1)----> |                 Server)
+    |                    |             -----------------
+    |                    |  [if necessary,    |
+    |                    |   perform DNS      |
+    |                    |   lookup on        |
+    |                    |   Sender Domain,   |
+    |                    |   open TCP         |
+    |                    |   connection,      |
+    |                    |   and establish    |
+    |                    |   stream]          |
+    |                    | -----------------> |
+    |                    |                    |
+    |                    |       send         |
+    |                    |   verify request   |
+    |                    | ----(STEP 2)-----> |
+    |                    |                    |
+    |                    |       send         |
+    |                    |   verify response  |
+    |                    | <----(STEP 3)----- |
+    |                    |                    |
+    |      report        |                    |
+    |  dialback result   |                    |
+    | <-----(STEP 4)---- |                    |
+  ]]></code>
+      <example caption="Initiating Server Opens Stream"><![CDATA[
+<stream:stream 
+        xmlns:stream='http://etherx.jabber.org/streams' 
+        xmlns='jabber:server' 
+        from='capulet.example' 
+        to='montague.example' 
+        version='1.0'>
+      ]]></example>
+      <example caption="Receiving Server Responds with a stream header and advertises TLS feature"><![CDATA[
+<stream:stream 
+        xmlns:stream='http://etherx.jabber.org/streams' 
+        xmlns='jabber:server' 
+        id='D60000229F' 
+        from='montague.example' 
+        to='capulet.example'
+        version='1.0'>
+<stream:features>
+  <starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'>
+    <required/>
+  </starttls>
+</stream:features>
+      ]]></example>
+      <example caption="Initiating Server Sends STARTTLS command"><![CDATA[
+<starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
+      ]]></example>
+      <example caption="Receiving Server informs Initiating Server to proceed"><![CDATA[
+<proceed xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
+      ]]></example>
+      <example caption="Initiating Server Opens Stream"><![CDATA[
+<stream:stream 
+        xmlns:stream='http://etherx.jabber.org/streams' 
+        xmlns='jabber:server' 
+        from='capulet.example' 
+        to='montague.example' 
+        version='1.0'>
+      ]]></example>
+      <example caption="Receiving Server Responds with a stream header"><![CDATA[
+<stream:stream 
+        xmlns:stream='http://etherx.jabber.org/streams' 
+        xmlns='jabber:server' 
+        id='D60000229F' 
+        from='montague.example' 
+        to='capulet.example'
+        version='1.0'>
+<stream:features>
+  <mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>
+  </mechanisms>
+</stream:features>
+      ]]></example>
+      <example caption="Initiating Server Sends Dialback Key (Step 1)"><![CDATA[
+<db:result
+    from='capulet.example'
+    to='montague.example'>
+  b4835385f37fe2895af6c196b59097b16862406db80559900d96bf6fa7d23df3
+</db:result>
+      ]]></example>
+      <example caption="Receiving Server Sends Verification Request to Authoritative Server (Step 2)"><![CDATA[
+<db:verify
+    from='montague.example'
+    id='D60000229F'
+    to='capulet.example'>
+  b4835385f37fe2895af6c196b59097b16862406db80559900d96bf6fa7d23df3
+</db:verify>
+      ]]></example>
+      <example caption="Receiving Server is Informed by Authoritative Server that Key is Valid (Step 3)"><![CDATA[
+<db:verify
+  from='capulet.example'
+  id='D60000229F'
+  to='montague.example'
+  type='valid'/>
+      ]]></example>
+      <example caption="Initiating Server Receives Valid Verification Result from Receiving Server (Step 4)"><![CDATA[
+<db:result
+  from='montague.example'
+  to='capulet.example'
+  type='valid'/>
+      ]]></example>
+</section1>
+<section1 topic='Security Considerations' anchor='security'>
+  <p>REQUIRED.</p>
+</section1>
+<section1 topic='IANA Considerations' anchor='iana'>
+  <p>This document requires no interaction with &IANA;.</p>
+</section1>
+<section1 topic='XMPP Registrar Considerations' anchor='registrar'>
+  <p>This document requires no interaction with the XMPP Registrar.</p>
+</section1>
+</xep>
