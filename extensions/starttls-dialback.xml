@@ -22,11 +22,19 @@
   <supersededby/>
   <shortname>NOT_YET_ASSIGNED</shortname>
   <revision>
+    <version>0.0.2</version>
+    <date>2013-11-13</date>
+    <initials>dwd</initials>
+    <remark><p>Added some narrative and a section on dwd.</p></remark>
+  </revision>
+  <revision>
     <version>0.0.1</version>
     <date>2013-11-04</date>
     <initials>ph</initials>
     <remark><p>First draft.</p></remark>
   </revision>
+  &fippo;
+  &dcridland;
 </header>
 <section1 topic='Introduction' anchor='intro'>
   <p>Although XEP-0220 describes dialback as being run before any other negotiation, it is typically run over TLS where supported. This allows it to be used as a simple convenient fallback to X.509 Strong Authentication within the TLS layer, as described in XMPP-CORE, and also affords greater protection to the exchange.</p>
