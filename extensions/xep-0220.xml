@@ -28,7 +28,7 @@
   &fippo;
   <revision>
     <version>1.1</version>
-    <date>2014-04-30</date>
+    <date>2014-05-28</date>
     <initials>ph</initials>
     <remark><p>Added resource-constraint dialback error condition.</p></remark>
   </revision>
