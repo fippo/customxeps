@@ -660,7 +660,7 @@ send: <db:verify
       </tr>
       <tr>
         <td>&constraint;</td>
-        <td>The Receiving Server lacks the resources to add the requested domain pair to the list of connections authorized for this connection. The initiating server should attempt to establish a new TCP connection to the target domain using the process described in <cite>RFC 6120</cite>.</td>
+        <td>The Receiving Server lacks the resources to add the requested domain pair to the list of connections authorized for this connection. The initiating server should attempt to establish a new TCP connection to the target domain using the process described in <cite>RFC 6120</cite> and give up when receiving the same error on the new connection.</td>
         <td>Step 4</td>
       </tr>
     </table>
