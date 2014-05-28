@@ -660,7 +660,7 @@ send: <db:verify
       </tr>
       <tr>
         <td>&constraint;</td>
-        <td>The Receiving Server lacks the resources to add the requested domain pair to the list of connections authorized for this connection. If an additional &lt;new-connection-required/&gt; application specific error element qualified by the 'urn:xmpp:dialback:errors' namespace is included, the initiating server should attempt to establish a new TCP connection to the target domain using the process described in <cite>RFC 6120</cite>.</td>
+        <td>The Receiving Server lacks the resources to add the requested domain pair to the list of connections authorized for this connection. The initiating server should attempt to establish a new TCP connection to the target domain using the process described in <cite>RFC 6120</cite>.</td>
         <td>Step 4</td>
       </tr>
     </table>
@@ -840,8 +840,6 @@ home.montague.example.                   86400 IN A                     10.44.0.
       XEP-0220: http://www.xmpp.org/extensions/xep-0220.html
     </xs:documentation>
   </xs:annotation>
-
-  <xs:element name='new-connection-required' type='empty'/>
 </xs:schema>
     ]]></code>
   </section2>
