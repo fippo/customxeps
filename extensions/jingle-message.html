@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>XEP-xxxx: Jingle Message Initiation FIXME</title><link rel="stylesheet" type="text/css" href="../xmpp.css" /><link href="../prettify.css" type="text/css" rel="stylesheet" /><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" /><script type="text/javascript" src="../prettify.js"></script><meta name="DC.Title" content="Jingle Message Initiation FIXME" /><meta name="DC.Creator" content="Philipp Hancke" /><meta name="DC.Description" content="This specification provides a way FIXME." /><meta name="DC.Publisher" content="XMPP Standards Foundation" /><meta name="DC.Contributor" content="XMPP Extensions Editor" /><meta name="DC.Date" content="2014-07-15" /><meta name="DC.Type" content="XMPP Extension Protocol" /><meta name="DC.Format" content="XHTML" /><meta name="DC.Identifier" content="XEP-xxxx" /><meta name="DC.Language" content="en" /><meta name="DC.Rights" content="This XMPP Extension Protocol is copyright &#xA9; 1999 - 2013 by the XMPP Standards Foundation (XSF)." /></head><body onload="prettyPrint()"><h1>XEP-xxxx: Jingle Message Initiation FIXME</h1><table><tr valign="top"><td><strong>Abstract:</strong></td><td>This specification provides a way FIXME.</td></tr><tr valign="top"><td><strong>Author:</strong></td><td>Philipp Hancke</td></tr><tr valign="top"><td><strong>Copyright:</strong></td><td>© 1999 - 2013 XMPP Standards Foundation. <a href="#appendix-legal">SEE LEGAL NOTICES</a>.</td></tr><tr valign="top"><td><strong>Status:</strong></td><td>ProtoXEP</td></tr><tr valign="top"><td><strong>Type:</strong></td><td>Standards Track</td></tr><tr valign="top"><td><strong>Version:</strong></td><td>0.0.1</td></tr><tr valign="top"><td><strong>Last Updated:</strong></td><td>2014-07-15</td></tr></table><hr /><p style="color:red">WARNING: This document has not yet been accepted for consideration or approved in any official manner by the XMPP Standards Foundation, and this document is not yet an XMPP Extension Protocol (XEP). If this document is accepted as a XEP by the XMPP Council, it will be published at &lt;<a href="http://xmpp.org/extensions/">http://xmpp.org/extensions/</a>&gt; and announced on the &lt;standards@xmpp.org&gt; mailing list.</p><hr /><h2>Table of Contents</h2><div class="indent"><p><br />1.  <a href="#intro">Introduction</a><br />2.  <a href="#reqs">Requirements</a><br />3.  <a href="#usecases">Use Cases</a><br />4.  <a href="#rules">Business Rules</a><br />5.  <a href="#acks">Acknowledgements</a><br />6.  <a href="#security">Security Considerations</a><br />7.  <a href="#iana">IANA Considerations</a><br />8.  <a href="#registrar">XMPP Registrar Considerations</a><br />   
+      8.1.  <a href="#registrar-ns">Protocol Namespaces</a><br />   
+      8.2.  <a href="#registrar-versioning">Protocol Versioning</a><br />9.  <a href="#schema">XML Schema</a></p><p><a href="#appendices">Appendices</a><br />    <a href="#appendix-docinfo">A: Document Information</a><br />    <a href="#appendix-authorinfo">B: Author Information</a><br />    <a href="#appendix-legal">C: Legal Notices</a><br />    <a href="#appendix-xmpp">D: Relation to XMPP</a><br />    <a href="#appendix-discuss">E: Discussion Venue</a><br />    <a href="#appendix-conformance">F: Requirements Conformance</a><br />    <a href="#appendix-notes">G: Notes</a><br />    <a href="#appendix-revs">H: Revision History</a></p></div><hr /><h2>1.
+       <a name="intro" id="intro">Introduction</a></h2>
+  <p class="" style="">picking the most available resource sucks</p>
+  <p class="" style="">callee must decide where to take a call</p>
+  <p class="" style="">presence decloaking sucks</p>
+  <p class="" style="">so we add a message exchange before the jingle one</p>
+<h2>2.
+       <a name="reqs" id="reqs">Requirements</a></h2>
+  <ul class="" style="">
+    <li class="" style="">must allow callee to choose resource/device to take the call</li>
+    <li class="" style="">ring-on-all-devices</li>
+    <li class="" style="">does not rely on presence</li>
+    <li class="" style="">use message for "forking"</li>
+    <li class="" style="">allow indication of session content</li>
+    <li class="" style="">must work with push notifications</li>
+    <li class="" style="">FIXME: how does this work with resource locking?</li>
+    <li class="" style="">FIXME: use headline messages?</li>
+  </ul>
+<h2>3.
+       <a name="usecases" id="usecases">Use Cases</a></h2>
+  <p class="" style="">FIXME: does romeo send directed presence here?</p>
+  <p class="caption"><a name="example-1" id="example-1"></a>Example 1. ...</p><div class="indent"><pre class="prettyprint">
+&lt;message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example'&gt;
+  &lt;something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+</pre></div>
+  <p class="" style="">Juliet's server distributes this to all off Juliets connected resources (and to push resources as appropriate). Those devices might start ringing as a result.</p>
+  <p class="caption"><a name="example-2" id="example-2"></a>Example 2. ...</p><div class="indent"><pre class="prettyprint">
+&lt;message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/desktop'&gt;
+  &lt;something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea/&gt;
+&lt;/message&gt;
+
+&lt;message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/tablet'&gt;
+  &lt;something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+
+&lt;message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/phone'&gt;
+  &lt;something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+</pre></div>
+  <p class="" style="">FIXME: show how romeo cancels this by sending a stop</p>
+  <p class="" style="">Since this is an audio-only call (as hinted by the reason attribute), Juliet chooses to take the call on her phone device. As a first step, she informs all of her own resources about this intention by sending a message to her own bare jid:</p>
+  <p class="caption"><a name="example-3" id="example-3"></a>Example 3. ...</p><div class="indent"><pre class="prettyprint">
+&lt;message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example'&gt;
+  &lt;stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+</pre></div>
+  <p class="" style="">Juliets server broadcasts this to all of her interested resources which stop ringing:</p>
+  <p class="caption"><a name="example-4" id="example-4"></a>Example 4. ...</p><div class="indent"><pre class="prettyprint">
+&lt;message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/desktop'&gt;
+  &lt;stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+&lt;message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/tablet'&gt;
+  &lt;stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+&lt;message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/phone'&gt;
+  &lt;stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+</pre></div>
+  <p class="" style="">Next, Juliet informs Romeo which resource to call, also sending directed presence because that is a good thing recommended (or not yet) in 0166.</p>
+  <p class="caption"><a name="example-5" id="example-5"></a>Example 5. ...</p><div class="indent"><pre class="prettyprint">
+&lt;presence from='juliet@capulet.example/phone'
+    to='romeo@montague.example/orchard'&gt;
+  &lt;c xmlns='http://jabber.org/protocol/caps' 
+     hash='sha-1'
+     node='http://code.google.com/p/exodus'
+     ver='QgayPKawpkPSDYmwT/WM94uAlu0='/&gt;
+&lt;/presence&gt;
+&lt;message from='juliet@capulet.example/phone'
+    to='romeo@montague.example/orchard'&gt;
+  &lt;start xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/&gt;
+&lt;/message&gt;
+</pre></div>
+  <p class="" style="">Now Romeo actually initiates the session.</p>
+  <p class="" style="">FIXME: replace phone with balcony again</p>
+  <p class="caption"><a name="example-6" id="example-6"></a>Example 6. Initiation</p><div class="indent"><pre class="prettyprint">
+&lt;iq from='romeo@montague.example/orchard'
+    id='ih28sx61'
+    to='juliet@capulet.example/balcony'
+    type='set'&gt;
+  &lt;jingle xmlns='urn:xmpp:jingle:1'
+          action='session-initiate'
+          initiator='romeo@montague.example/orchard'
+          sid='a73sjjvkla37jfea'&gt;
+    &lt;content creator='initiator' name='voice'&gt;
+      &lt;description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'&gt;
+        &lt;payload-type id='96' name='speex' clockrate='16000'/&gt;
+        &lt;payload-type id='97' name='speex' clockrate='8000'/&gt;
+        &lt;payload-type id='18' name='G729'/&gt;
+        &lt;payload-type id='0' name='PCMU'/&gt;
+        &lt;payload-type id='103' name='L16' clockrate='16000' channels='2'/&gt;
+        &lt;payload-type id='98' name='x-ISAC' clockrate='8000'/&gt;
+      &lt;/description&gt;
+      &lt;transport xmlns='urn:xmpp:jingle:transports:ice-udp:1'
+                 pwd='asd88fgpdd777uzjYhagZg'
+                 ufrag='8hhy'&gt;
+        &lt;candidate component='1'
+                   foundation='1'
+                   generation='0'
+                   id='el0747fg11'
+                   ip='10.0.1.1'
+                   network='1'
+                   port='8998'
+                   priority='2130706431'
+                   protocol='udp'
+                   type='host'/&gt;
+        &lt;candidate component='1'
+                   foundation='2'
+                   generation='0'
+                   id='y3s2b30v3r'
+                   ip='192.0.2.3'
+                   network='1'
+                   port='45664'
+                   priority='1694498815'
+                   protocol='udp'
+                   rel-addr='10.0.1.1'
+                   rel-port='8998'
+                   type='srflx'/&gt;
+      &lt;/transport&gt;
+    &lt;/content&gt;
+  &lt;/jingle&gt;
+&lt;/iq&gt;
+</pre></div>
+<h2>4.
+       <a name="rules" id="rules">Business Rules</a></h2>
+  <p class="" style="">FIXME: when to use this? for humans</p>
+  <p class="" style="">choosing a reason</p>
+<h2>5.
+       <a name="acks" id="acks">Acknowledgements</a></h2>
+  <p class="" style="">Thanks to Peter Saint-Andre and Lance Stout for their feedback.</p>
+<h2>6.
+       <a name="security" id="security">Security Considerations</a></h2>
+  <p class="" style="">TODO</p>
+  <p class="" style="">check 0276?</p>
+<h2>7.
+       <a name="iana" id="iana">IANA Considerations</a></h2>
+  <p class="" style="">This document requires no interaction with the <span class="ref" style=""><a href="http://www.iana.org/">Internet Assigned Numbers Authority (IANA)</a></span>  [<a href="#nt-idp1012336">1</a>].</p>
+<h2>8.
+       <a name="registrar" id="registrar">XMPP Registrar Considerations</a></h2>
+  <div class="indent"><h3>8.1 <a name="registrar-ns" id="registrar-ns">Protocol Namespaces</a></h3>
+    <p class="" style="">This specification defines the following XML namespace:</p>
+    <ul class="" style="">
+      <li class="" style="">urn:xmpp:jingle:apps:rtp:ssma:0</li>
+    </ul>
+    <p class="" style="">The <span class="ref" style=""><a href="http://xmpp.org/registrar/">XMPP Registrar</a></span>  [<a href="#nt-idp1021040">2</a>] includes the foregoing namespace to the registry located at &lt;<a href="http://xmpp.org/registrar/namespaces.html">http://xmpp.org/registrar/namespaces.html</a>&gt;, as described in Section 4 of <span class="ref" style=""><a href="http://xmpp.org/extensions/xep-0053.html">XMPP Registrar Function (XEP-0053)</a></span>  [<a href="#nt-idp1025280">3</a>].</p>
+  </div>
+  <div class="indent"><h3>8.2 <a name="registrar-versioning" id="registrar-versioning">Protocol Versioning</a></h3>
+    <p class="" style="">If the protocol defined in this specification undergoes a revision that is not fully backwards-compatible with an older version, the XMPP Registrar shall increment the protocol version number found at the end of the XML namespaces defined herein, as described in Section 4 of <span class="ref">XEP-0053</span>.</p>
+  </div>
+  <p class="" style="">FIXME: provide initial registration for reasons: audio (voice-only session), video (voice+video), file (filetransfer)</p>
+<h2>9.
+       <a name="schema" id="schema">XML Schema</a></h2>
+  <p class="" style="">REQUIRED for protocol specifications.</p>
+<hr /><a name="appendices" id="appendices"></a><h2>Appendices</h2><hr /><a name="appendix-docinfo" id="appendix-docinfo"></a><h3>Appendix A: Document Information</h3><p class="indent">
+            Series: <a href="http://xmpp.org/extensions/">XEP</a><br />
+            Number: xxxx<br />
+            Publisher: <a href="/xsf/">XMPP Standards Foundation</a><br />
+            Status: 
+            <a href="http://xmpp.org/extensions/xep-0001.html#states-ProtoXEP">ProtoXEP</a><br />
+            Type:
+            <a href="http://xmpp.org/extensions/xep-0001.html#types-Standards Track">Standards Track</a><br />
+            Version: 0.0.1<br />
+            Last Updated: 2014-07-15<br />
+                Approving Body: <a href="http://xmpp.org/council/">XMPP Council</a><br />Dependencies: XEP-0166<br />
+                Supersedes: None<br />
+                Superseded By: None<br />
+            Short Name: jingle-message<br />
+            This document in other formats: 
+                <a class="standardsButton" href="http://xmpp.org/extensions/xep-xxxx.xml">XML</a> 
+                <a class="standardsButton" href="http://xmpp.org/extensions/xep-xxxx.pdf">PDF</a></p><hr /><a name="appendix-authorinfo" id="appendix-authorinfo"></a><h3>Appendix B: Author Information</h3><div class="indent"><h3>Philipp Hancke</h3><p class="indent">
+        JabberID: 
+        <a href="xmpp:fippo@psyced.org">fippo@psyced.org</a><br /></p></div><hr /><a name="appendix-legal" id="appendix-legal"></a><h3>Appendix C: Legal Notices</h3><div class="indent"><h4>Copyright</h4>This XMPP Extension Protocol is copyright © 1999 - 2013 by the <a href="http://xmpp.org/">XMPP Standards Foundation</a> (XSF).<h4>Permissions</h4>Permission is hereby granted, free of charge, to any person obtaining a copy of this specification (the "Specification"), to make use of the Specification without restriction, including without limitation the rights to implement the Specification in a software program, deploy the Specification in a network service, and copy, modify, merge, publish, translate, distribute, sublicense, or sell copies of the Specification, and to permit persons to whom the Specification is furnished to do so, subject to the condition that the foregoing copyright notice and this permission notice shall be included in all copies or substantial portions of the Specification. Unless separate permission is granted, modified works that are redistributed shall not contain misleading information regarding the authors, title, number, or publisher of the Specification, and shall not claim endorsement of the modified works by the authors, any organization or project to which the authors belong, or the XMPP Standards Foundation.<h4>Disclaimer of Warranty</h4><span style="font-weight: bold">## NOTE WELL: This Specification is provided on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, express or implied, including, without limitation, any warranties or conditions of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A PARTICULAR PURPOSE. ##</span><h4>Limitation of Liability</h4>In no event and under no legal theory, whether in tort (including negligence), contract, or otherwise, unless required by applicable law (such as deliberate and grossly negligent acts) or agreed to in writing, shall the XMPP Standards Foundation or any author of this Specification be liable for damages, including any direct, indirect, special, incidental, or consequential damages of any character arising from, out of, or in connection with the Specification or the implementation, deployment, or other use of the Specification (including but not limited to damages for loss of goodwill, work stoppage, computer failure or malfunction, or any and all other commercial damages or losses), even if the XMPP Standards Foundation or such author has been advised of the possibility of such damages.<h4>IPR Conformance</h4>This XMPP Extension Protocol has been contributed in full conformance with the XSF's Intellectual Property Rights Policy (a copy of which can be found at &lt;<a href="http://xmpp.org/about-xmpp/xsf/xsf-ipr-policy/">http://xmpp.org/about-xmpp/xsf/xsf-ipr-policy/</a>&gt; or obtained by writing to XMPP Standards Foundation, 1899 Wynkoop Street, Suite 600, Denver, CO 80202 USA).</div><hr /><a name="appendix-xmpp" id="appendix-xmpp"></a><h3>Appendix D: Relation to XMPP</h3><p class="indent">The Extensible Messaging and Presence Protocol (XMPP) is defined in the XMPP Core (RFC 6120) and XMPP IM (RFC 6121) specifications contributed by the XMPP Standards Foundation to the Internet Standards Process, which is managed by the Internet Engineering Task Force in accordance with RFC 2026. Any protocol defined in this document has been developed outside the Internet Standards Process and is to be understood as an extension to XMPP rather than as an evolution, development, or modification of XMPP itself.</p><hr /><a name="appendix-discuss" id="appendix-discuss"></a><h3>Appendix E: Discussion Venue</h3><p class="indent">The primary venue for discussion of XMPP Extension Protocols is the &lt;<a href="http://mail.jabber.org/mailman/listinfo/standards">standards@xmpp.org</a>&gt; discussion list.</p><p class="indent">Discussion on other xmpp.org discussion lists might also be appropriate; see &lt;<a href="http://xmpp.org/about/discuss.shtml">http://xmpp.org/about/discuss.shtml</a>&gt; for a complete list.</p><p class="indent">Errata can be sent to &lt;<a href="mailto:editor@xmpp.org">editor@xmpp.org</a>&gt;.</p><hr /><a name="appendix-conformance" id="appendix-conformance"></a><h3>Appendix F: Requirements Conformance</h3><p class="indent">The following requirements keywords as used in this document are to be interpreted as described in <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a>: "MUST", "SHALL", "REQUIRED"; "MUST NOT", "SHALL NOT"; "SHOULD", "RECOMMENDED"; "SHOULD NOT", "NOT RECOMMENDED"; "MAY", "OPTIONAL".</p><hr /><a name="appendix-notes" id="appendix-notes"></a><h3>Appendix G: Notes</h3><div class="indent"><p><a name="nt-idp1012336" id="nt-idp1012336">1</a>. The Internet Assigned Numbers Authority (IANA) is the central coordinator for the assignment of unique parameter values for Internet protocols, such as port numbers and URI schemes. For further information, see &lt;<a href="http://www.iana.org/">http://www.iana.org/</a>&gt;.</p><p><a name="nt-idp1021040" id="nt-idp1021040">2</a>. The XMPP Registrar maintains a list of reserved protocol namespaces as well as registries of parameters used in the context of XMPP extension protocols approved by the XMPP Standards Foundation. For further information, see &lt;<a href="http://xmpp.org/registrar/">http://xmpp.org/registrar/</a>&gt;.</p><p><a name="nt-idp1025280" id="nt-idp1025280">3</a>. XEP-0053: XMPP Registrar Function &lt;<a href="http://xmpp.org/extensions/xep-0053.html">http://xmpp.org/extensions/xep-0053.html</a>&gt;.</p></div><hr /><a name="appendix-revs" id="appendix-revs"></a><h3>Appendix H: Revision History</h3><p>Note: Older versions of this specification might be available at <a href="http://xmpp.org/extensions/attic/">http://xmpp.org/extensions/attic/</a></p><div class="indent"><h4>Version 0.0.1 (2014-07-15)</h4><div class="indent"><p class="" style="">First draft.</p> (ph)
+    </div></div><hr /><p>END</p></body></html>

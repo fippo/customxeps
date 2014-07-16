@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE xep SYSTEM 'xep.dtd' [
+  <!ENTITY % ents SYSTEM 'xep.ent'>
+%ents;
+]>
+<?xml-stylesheet type='text/xsl' href='xep.xsl'?>
+<xep>
+<header>
+  <title>Jingle Message Initiation FIXME</title>
+  <abstract>This specification provides a way FIXME.</abstract>
+  &LEGALNOTICE;
+  <number>xxxx</number>
+  <status>ProtoXEP</status>
+  <type>Standards Track</type>
+  <sig>Standards</sig>
+  <approver>Council</approver>
+  <dependencies>
+    <spec>XEP-0166</spec>
+  </dependencies>
+  <supersedes/>
+  <supersededby/>
+  <shortname>jingle-message</shortname>
+  &fippo;
+  <revision>
+    <version>0.0.1</version>
+    <date>2014-07-15</date>
+    <initials>ph</initials>
+    <remark><p>First draft.</p></remark>
+  </revision>
+</header>
+<section1 topic='Introduction' anchor='intro'>
+  <p>picking the most available resource sucks</p>
+  <p>callee must decide where to take a call</p>
+  <p>presence decloaking sucks</p>
+  <p>so we add a message exchange before the jingle one</p>
+</section1>
+<section1 topic='Requirements' anchor='reqs'>
+  <ul>
+    <li>must allow callee to choose resource/device to take the call</li>
+    <li>ring-on-all-devices</li>
+    <li>does not rely on presence</li>
+    <li>use message for "forking"</li>
+    <li>allow indication of session content</li>
+    <li>must work with push notifications</li>
+    <li>FIXME: how does this work with resource locking?</li>
+    <li>FIXME: use headline messages?</li>
+  </ul>
+</section1>
+<section1 topic='Use Cases' anchor='usecases'>
+  <p>FIXME: does romeo send directed presence here?</p>
+  <example caption="..."><![CDATA[
+<message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example'>
+  <something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>Juliet's server distributes this to all off Juliets connected resources (and to push resources as appropriate). Those devices might start ringing as a result.</p>
+  <example caption="..."><![CDATA[
+<message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/desktop'>
+  <something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea/>
+</message>
+
+<message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/tablet'>
+  <something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/>
+</message>
+
+<message from='romeo@montague.example/orchard'
+    to='juliet@capulet.example/phone'>
+  <something xmlns='urn:xmpp:something' reason='audio' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>FIXME: show how romeo cancels this by sending a stop</p>
+  <p>Since this is an audio-only call (as hinted by the reason attribute), Juliet chooses to take the call on her phone device. As a first step, she informs all of her own resources about this intention by sending a message to her own bare jid:</p>
+  <example caption="..."><![CDATA[
+<message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example'>
+  <stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>Juliets server broadcasts this to all of her interested resources which stop ringing:</p>
+  <example caption="..."><![CDATA[
+<message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/desktop'>
+  <stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/>
+</message>
+<message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/tablet'>
+  <stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/>
+</message>
+<message from='juliet@capulet.example/phone'
+    to='juliet@capulet.example/phone'>
+  <stop xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>Next, Juliet informs Romeo which resource to call, also sending directed presence because that is a good thing recommended (or not yet) in 0166.</p>
+  <example caption="..."><![CDATA[
+<presence from='juliet@capulet.example/phone'
+    to='romeo@montague.example/orchard'>
+  <c xmlns='http://jabber.org/protocol/caps' 
+     hash='sha-1'
+     node='http://code.google.com/p/exodus'
+     ver='QgayPKawpkPSDYmwT/WM94uAlu0='/>
+</presence>
+<message from='juliet@capulet.example/phone'
+    to='romeo@montague.example/orchard'>
+  <start xmlns='urn:xmpp:something' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>Now Romeo actually initiates the session.</p>
+  <p>FIXME: replace phone with balcony again</p>
+  <example caption="Initiation"><![CDATA[
+<iq from='romeo@montague.example/orchard'
+    id='ih28sx61'
+    to='juliet@capulet.example/balcony'
+    type='set'>
+  <jingle xmlns='urn:xmpp:jingle:1'
+          action='session-initiate'
+          initiator='romeo@montague.example/orchard'
+          sid='a73sjjvkla37jfea'>
+    <content creator='initiator' name='voice'>
+      <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'>
+        <payload-type id='96' name='speex' clockrate='16000'/>
+        <payload-type id='97' name='speex' clockrate='8000'/>
+        <payload-type id='18' name='G729'/>
+        <payload-type id='0' name='PCMU'/>
+        <payload-type id='103' name='L16' clockrate='16000' channels='2'/>
+        <payload-type id='98' name='x-ISAC' clockrate='8000'/>
+      </description>
+      <transport xmlns='urn:xmpp:jingle:transports:ice-udp:1'
+                 pwd='asd88fgpdd777uzjYhagZg'
+                 ufrag='8hhy'>
+        <candidate component='1'
+                   foundation='1'
+                   generation='0'
+                   id='el0747fg11'
+                   ip='10.0.1.1'
+                   network='1'
+                   port='8998'
+                   priority='2130706431'
+                   protocol='udp'
+                   type='host'/>
+        <candidate component='1'
+                   foundation='2'
+                   generation='0'
+                   id='y3s2b30v3r'
+                   ip='192.0.2.3'
+                   network='1'
+                   port='45664'
+                   priority='1694498815'
+                   protocol='udp'
+                   rel-addr='10.0.1.1'
+                   rel-port='8998'
+                   type='srflx'/>
+      </transport>
+    </content>
+  </jingle>
+</iq>
+]]></example>
+</section1>
+<section1 topic='Business Rules' anchor='rules'>
+  <p>FIXME: when to use this? for humans</p>
+  <p>choosing a reason</p>
+</section1>
+<section1 topic='Acknowledgements' anchor='acks'>
+  <p>Thanks to Peter Saint-Andre and Lance Stout for their feedback.</p>
+</section1>
+<section1 topic='Security Considerations' anchor='security'>
+  <p>TODO</p>
+  <p>check 0276?</p>
+</section1>
+<section1 topic='IANA Considerations' anchor='iana'>
+  <p>This document requires no interaction with &IANA;.</p>
+</section1>
+<section1 topic='XMPP Registrar Considerations' anchor='registrar'>
+  <section2 topic='Protocol Namespaces' anchor='registrar-ns'>
+    <p>This specification defines the following XML namespace:</p>
+    <ul>
+      <li>urn:xmpp:jingle:apps:rtp:ssma:0</li>
+    </ul>
+    <p>The &REGISTRAR; includes the foregoing namespace to the registry located at &NAMESPACES;, as described in Section 4 of &xep0053;.</p>
+  </section2>
+  <section2 topic='Protocol Versioning' anchor='registrar-versioning'>
+    &NSVER;
+  </section2>
+  <p>FIXME: provide initial registration for reasons: audio (voice-only session), video (voice+video), file (filetransfer)</p>
+</section1>
+<section1 topic='XML Schema' anchor='schema'>
+  <p>REQUIRED for protocol specifications.</p>
+</section1>
+</xep>
