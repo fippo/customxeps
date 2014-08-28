@@ -63,22 +63,25 @@
     ]]></example>
     <p>The server of the responder (e.g., Juliet) distributes this message stanza to all of Juliet's connected resources (and to push resources as appropriate). Those devices might start ringing as a result.</p>
     <example caption="Responder's Server Distributes Intent Message"><![CDATA[
+<!-- delivered to juliet@capulet.example/desktop -->
 <message from='romeo@montague.example/orchard'
-         to='juliet@capulet.example/desktop'>
+         to='juliet@capulet.example'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
     <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
 
+<!-- delivered to juliet@capulet.example/tablet -->
 <message from='romeo@montague.example/orchard'
-         to='juliet@capulet.example/tablet'>
+         to='juliet@capulet.example'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
     <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
 
+<!-- delivered to juliet@capulet.example/phone -->
 <message from='romeo@montague.example/orchard'
-         to='juliet@capulet.example/phone'>
+         to='juliet@capulet.example'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
     <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
@@ -105,16 +108,21 @@
 ]]></example>
   <p>Juliet's server broadcasts this accept message to all of her interested resources (see &rfc6121;), which stop ringing:</p>
   <example caption="Responder's Server Delivers Accept Message"><![CDATA[
+<!-- delivered to juliet@capulet.example/desktop -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example/desktop'>
+    to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
+
+<!-- delivered to juliet@capulet.example/tablet -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example/tablet'>
+    to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
+
+<!-- delivered to juliet@capulet.example/phone -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example/phone'>
+    to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
     ]]></example>
