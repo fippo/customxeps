@@ -57,7 +57,7 @@
 <message from='romeo@montague.example/orchard'
     to='juliet@capulet.example'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
-    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'>
+    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
     ]]></example>
@@ -66,21 +66,21 @@
 <message from='romeo@montague.example/orchard'
          to='juliet@capulet.example/desktop'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
-    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'>
+    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
 
 <message from='romeo@montague.example/orchard'
          to='juliet@capulet.example/tablet'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
-    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'>
+    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
 
 <message from='romeo@montague.example/orchard'
          to='juliet@capulet.example/phone'>
   <intent xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'>
-    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'>
+    <description xmlns='urn:xmpp:jingle:apps:rtp:1' media='audio'/>
   </intent>
 </message>
     ]]></example>
