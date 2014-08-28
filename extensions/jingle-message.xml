@@ -26,7 +26,7 @@
     <version>0.0.2</version>
     <date>2014-08-28</date>
     <initials>psa/ph</initials>
-    <remark><p>Added explanatory text; defined more granular actions (propose, retract, accept, proceed); mandated inclusion of description elements as in jingle-pub; defined schema.</p></remark>
+    <remark><p>Added explanatory text; defined more granular actions (propose, retract, accept, reject, proceed); mandated inclusion of description elements within the propose element, as in jingle-pub; defined schema.</p></remark>
   </revision>
   <revision>
     <version>0.0.1</version>
@@ -87,6 +87,16 @@
   </propose>
 </message>
     ]]></example>
+    <p>Consistent with the recommendation for one-to-one chat sessions in Section 5.1 of &rfc6121;, the initiator SHOULD also send directed presence to the responder if the two entities do not already share presence information; including Entity Capabilities (XEP-0115) information in this directed presence stanza enables the responder to know the availability of the initiator (e.g., in case the message is actually delivered quite a bit later because it is saved to offline storage) and also to know the XMPP feautures supported by the initiator.</p>
+    <example caption="Initiator Sends Directed Presence"><![CDATA[
+<presence to='romeo@montague.example/orchard'
+          from='juliet@capulet.example'>
+  <c xmlns='http://jabber.org/protocol/caps' 
+     hash='sha-1'
+     node='http://psi-im.org'
+     ver='q07IKJEyjvHSyhy//CH0CxmKi8w='/>
+</presence>
+    ]]></example>
   </section2>
   <section2 topic='Disavowing Intent to Start a Session' anchor='retract'>
     <p>It can happen that the initiator might want to disavow intent to send a session invitation (e.g., because the initiator has accepted another session). The initiator can do so by sending a message stanza containing a &lt;retract/&gt; element specifying the same session ID.</p>
@@ -106,27 +116,27 @@
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
 ]]></example>
-  <p>Juliet's server broadcasts this accept message to all of her available resources (see &rfc6121;), which stop ringing:</p>
+  <p>Juliet's server broadcasts this accept message to all of her available resources (as described in RFC 6121), which stop ringing:</p>
   <example caption="Responder's Server Delivers Accept Message"><![CDATA[
 <!-- delivered to juliet@capulet.example/desktop -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example'>
+         to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
 
 <!-- delivered to juliet@capulet.example/tablet -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example'>
+         to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
 
 <!-- delivered to juliet@capulet.example/phone -->
 <message from='juliet@capulet.example/phone'
-    to='juliet@capulet.example'>
+         to='juliet@capulet.example'>
   <accept xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
 </message>
     ]]></example>
-    <p>Next, the device from which Juliet accepted the call tells Romeo to proceed with the session (via a message stanza containing a &lt;proceed/&gt; element), and also sends directed presence because that is a good thing.</p>
+    <p>Next, the device from which Juliet accepted the call tells Romeo to proceed with the session (via a message stanza containing a &lt;proceed/&gt; element), and also sends directed presence for the reasons described above.</p>
     <example caption="Responder Sends Directed Presence and Start Message"><![CDATA[
 <message from='juliet@capulet.example/phone'
          to='romeo@montague.example/orchard'>
@@ -140,6 +150,35 @@
      node='http://code.google.com/p/exodus'
      ver='QgayPKawpkPSDYmwT/WM94uAlu0='/>
 </presence>
+    ]]></example>
+  </section2>
+  <section2 topic='Rejecting Intent to Start a Session' anchor='reject'>
+  <p>Instead of accepting the call, the responder might want to ignore the call and tell all of her devices to stop ringing (e.g., perhaps because Romeo is getting to be a bit of a nuisance). She does this by rejecting the call on one of her devices and having that device tell all of the other devices to stop ringing, in the form of a message to her own bare JID containing an &lt;reject/&gt; element specifying the session ID of the original &lt;propose/&gt; message.</p>
+  <example caption="One of Responder's Resources Rejects the Call"><![CDATA[
+<message from='juliet@capulet.example/tablet'
+         to='juliet@capulet.example'>
+  <reject xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
+</message>
+]]></example>
+  <p>Juliet's server broadcasts this reject message to all of her available resources (as described in RFC 6121), which stop ringing:</p>
+  <example caption="Responder's Server Delivers Reject Message"><![CDATA[
+<!-- delivered to juliet@capulet.example/desktop -->
+<message from='juliet@capulet.example/tablet'
+         to='juliet@capulet.example'>
+  <reject xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
+</message>
+
+<!-- delivered to juliet@capulet.example/tablet -->
+<message from='juliet@capulet.example/tablet'
+         to='juliet@capulet.example'>
+  <reject xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
+</message>
+
+<!-- delivered to juliet@capulet.example/phone -->
+<message from='juliet@capulet.example/tablet'
+         to='juliet@capulet.example'>
+  <reject xmlns='urn:xmpp:jingle-message:0' id='a73sjjvkla37jfea'/>
+</message>
     ]]></example>
   </section2>
   <section2 topic='Initiating the Jingle Session' anchor='initiate'>
@@ -259,6 +298,16 @@
         <xs:any namespace='##other' minOccurs='1' maxOccurs='unbounded'/>
       </xs:sequence>
       <xs:attribute name='id' type='xs:string' use='required'/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name='reject'>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base='empty'>
+          <xs:attribute name='id' type='xs:string' use='required'/>
+        </xs:extension>
+      </xs:simpleContent>
     </xs:complexType>
   </xs:element>
 
