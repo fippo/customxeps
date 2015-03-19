@@ -345,9 +345,8 @@ example              example
     |                    |   and establish    |
     |                    |   stream]          |
     |                    | -----------------> |
-    |                    | [observe certificate
-    |                    |  correct for capulet.example
-    |                    |  as per RFC 6125 and same as
+    |                    | [observe certificate is for
+    |                    |  capulet.example and same as
     |                    |  used by orchard.capulat.example]
     |      report        |
     |  dialback result   |
@@ -412,7 +411,7 @@ example              example
   b4835385f37fe2895af6c196b59097b16862406db80559900d96bf6fa7d23df3
 </db:result>
       ]]></example>
-      <p>The Receiving Server may need to establish a connection to the Authoritative Server at this point. Here we assume that this connection is using TLS and the certificate presented by the Authoritative Server is the same as the one used by the Originating Server.</p>
+      <p>The Receiving Server may need to establish a connection to the Authoritative Server at this point. Here we assume that this connection is using TLS and the certificate presented by the Authoritative Server is the same as the one used by the Originating Server and contains the domain name claimed by the Originating Server.</p>
       <example caption="Initiating Server Receives Valid Verification Result from Receiving Server (Step 4)"><![CDATA[
 <db:result
   from='montague.example'
