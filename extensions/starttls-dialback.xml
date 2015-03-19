@@ -311,7 +311,7 @@ example              example
       ]]></example>
   </section2>
   <section2 topic='Same Certificate shortcut' anchor='samecert'>
-    <p>If during the initial connection, home.montague.example is not able to determine that the certificate presented is trustworthy but the Authoritative Server presents the same certificate as the Originating Server, the &lt;db:verify/&gt; step can be elided.</p>
+    <p>If during the initial connection, the Receiving Server is unable to determine that the certificate presented is trustworthy but the Authoritative Server presents the same certificate as the Originating Server, the &lt;db:verify/&gt; step can be elided.</p>
     <p>Note: the Receiving Server MUST still check that the hostname in the certificate matches.</p>
     <p>Essentially, this replaces the Dialback Key Validation step from &xep0185; with the somewhat more elaborate proof of posession of the private key associated with the certificate.</p>
   <code><![CDATA[
